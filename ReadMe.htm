@@ -1,0 +1,72 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+<head>
+	<meta http-equiv="content-type" content="text/html; charset=windows-1252"/>
+	<title>Untitled Document</title>
+	<meta name="generator" content="LibreOffice 7.1.0.3 (Windows)"/>
+	<meta name="created" content="00:00:00"/>
+	<meta name="changed" content="2021-02-25T13:01:29.239000000"/>
+	<meta name="Originator" content="Microsoft Word 10"/>
+	<meta name="ProgId" content="Word.Document"/>
+	<meta name="created" content="00:00:00">
+	<style type="text/css">
+		p { color: #000000 }
+		h2 { color: #000000 }
+		h2.cjk { font-family: "NSimSun" }
+		h2.ctl { font-family: "Arial" }
+		a:link { color: #0000ff }
+		a:visited { color: #0000ff }
+	</style>
+</head>
+<body lang="en-GB" text="#000000" link="#0000ff" vlink="#0000ff" dir="ltr">
+<table width="100%" cellpadding="0" cellspacing="0" style="page-break-before: always">
+	<tr>
+		<td style="border: none; padding: 0cm"><h2 class="western">ASCOM
+			Dome Driver (C#) FOR LifeRoof /FA-Duino Mega</h2>
+		</td>
+	</tr>
+</table>
+<p style="margin-bottom: 0.42cm">This driver is for the FA-Duino //
+LifeRoof motor system for a roll-off roof. Apart from the standard
+commands to open, close, abort and detect the shutter state, it
+includes some custom controls. The open and close commands are only
+executed by the Arduino if it is safe to do so, that is, it does not
+hit the mount or it is not raining. Updated in V2.4 to wait for new
+shutterstatus before responding after open or close commands.</p>
+<p style="margin-bottom: 0.42cm">Commands:</p>
+<p style="margin-bottom: 0.42cm">&quot;CLOSE&quot; CloseRoof;</p>
+<p style="orphans: 1">&quot;OPEN&quot; OpenRoof;</p>
+<p style="orphans: 1">&quot;INIT&quot; Initialise Roof system
+(non-standard);</p>
+<p style="orphans: 1">&quot;ABORT&quot; AbortRoof;</p>
+<p style="orphans: 1">&quot;FORCEOPEN&quot; (non-standard);</p>
+<p style="orphans: 1">&quot;FORCECLOSE&quot; (non-standard);</p>
+<p style="orphans: 1">&quot;NORAINSENSE&quot; (non-standard, disable
+rain sensor);</p>
+<p style="orphans: 1">&quot;NOPARKSENSE&quot; (non-standard, disable
+park sensor);</p>
+<p style="orphans: 1">&quot;RAINSENSE&quot; (non-standard, enable
+rain sensor);</p>
+<p style="orphans: 1">&quot;PARKSENSE&quot; (non-standard, enable
+park sensor);</p>
+<p style="orphans: 1">&ldquo;PARKSENSOR&rdquo; (non-standard, show
+park sensor enable status)</p>
+<p style="orphans: 1">&ldquo;RAINSENSOR&rdquo; (non-standard, show
+rain sensor enable status)</p>
+<p style="orphans: 1">&ldquo;SPARE&rdquo; (non-standard, show nn.n
+number from undefined sensor)</p>
+<p>The Arduino transmits a status, including environment sensory
+information, of which rain and mount park confirmation are currently
+active.</p>
+<p>Message is 14 chars long, with $and # at either end.</p>
+<p>&ldquo;$raining,roofstatus,parked,<font color="#000000">rainsense</font>,<font color="#000000">parksense</font>,<font color="#000000">nn.n</font>#&rdquo;&nbsp;&nbsp;
+rain, rainsense, parksense and parked are Booleans, roofstatus is
+enumerated: 
+</p>
+<p>int shutterOpen = 0;</p>
+<p>int shutterClosed = 1;</p>
+<p>int shutterOpening = 2;</p>
+<p>int shutterClosing = 3;</p>
+<p>int shutterError = 4;</p>
+</body>
+</html>
