@@ -21,7 +21,7 @@
 // Feb'21       CJW 2.4    reworked in Ascom 6.5 templates
 // Feb'21       CJW 2.5    reworked so that open or close waits for response
 // Feb'21       CJW 2.6    updated with different transmission, including sensor overrides
-// Aug'22       CJW 2.7    added supported actions (overdue!!) 
+// Aug'22       CJW 2.7    added supported actions documentation (overdue!!) , 19200 baud
 // --------------------------------------------------------------------------------
 
 
@@ -123,7 +123,7 @@ namespace ASCOM.MegaRoof
         // it runs in the background, Arduino broadcasts every 4 seconds
         private bool OpenArduino()
         {
-            Serial.BaudRate = 19200;
+            Serial.BaudRate = 19200;  // note original was 9600
             Serial.PortName = comPort;
             Serial.Parity = Parity.None;
             Serial.DataBits = 8;
