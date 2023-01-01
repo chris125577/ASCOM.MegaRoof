@@ -22,6 +22,7 @@
 // Feb'21       CJW 2.5    reworked so that open or close waits for response
 // Feb'21       CJW 2.6    updated with different transmission, including sensor overrides
 // Aug'22       CJW 2.7    added supported actions documentation (overdue!!) , 19200 baud
+// Dec'22       CJW 3.0    added BEEPON BEEPOFF and BEEPSTATUS commands
 // --------------------------------------------------------------------------------
 
 
@@ -86,7 +87,7 @@ namespace ASCOM.MegaRoof
         /// Private variable to hold the connected state
         /// </summary>
         private bool connectedState;
-        private string[] arduinoStatus = new string[6];  //  "$dry,roof,park,rainsense,parksense,wind(xx.x)#"
+        private string[] arduinoStatus = new string[6];  //  "$dry,roof,park,rainsense,parksense,beepstatus#"
 
         /// <summary>
         /// Private variable to hold an ASCOM Utilities object
@@ -168,10 +169,10 @@ namespace ASCOM.MegaRoof
                             arduinoMessage = buffer;  // transfer the buffer to the message and clear the buffer
                             buffer = "";
                             startCharRx = false;
-                            if (arduinoMessage.Length == 14) // check the message length is OK (was 17 with old message)
+                            if (arduinoMessage.Length == 11) // check the message length is OK (was 14 with old 'spare' message)
                             {
                                 dataRx = true; // tell the world that data is available
-                                arduinoStatus = arduinoMessage.Split(delimeter);  // rain / roof / park / rainsense / mountsense / spare
+                                arduinoStatus = arduinoMessage.Split(delimeter);  // rain / roof / park / rainsense / mountsense / beep
                             }
                             else  // message was corrupted
                             {
@@ -223,7 +224,7 @@ namespace ASCOM.MegaRoof
             get
             {
                 ArrayList suptaction =new ArrayList()
-                { "INIT","FORCEOPEN","FORCECLOSE","NORAINSENSE","NOPARKSENSE","RAINSENSE","PARKSENSE","PARKSENSOR","RAINSENSOR"};
+                { "INIT","FORCEOPEN","FORCECLOSE","NORAINSENSE","NOPARKSENSE","RAINSENSE","PARKSENSE","PARKSENSOR","RAINSENSOR","BEEPON","BEEPOFF","BEEPSTATUS"};
                     return suptaction;
             }
         }
@@ -268,7 +269,7 @@ namespace ASCOM.MegaRoof
                         else if (command == "PARK" && dataRx) return (arduinoStatus[2]);
                         else if (command == "RAINSENSOR" && dataRx) return (arduinoStatus[3]);
                         else if (command == "PARKSENSOR" && dataRx) return (arduinoStatus[4]);
-                        else if (command == "SPARE" && dataRx) return (arduinoStatus[5]);  // replace "SPARE" with something else in due course nn.n
+                        else if (command == "BEEPSTATUS" && dataRx) return (arduinoStatus[5]);  
                         else
                         {
                             if (command == "SHUTTERSTATUS") tl.LogMessage("comms error", "no shutter data");  // diagnostic

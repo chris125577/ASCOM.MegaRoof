@@ -1,13 +1,14 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<!DOCTYPE html>
 <html>
 <head>
 	<meta http-equiv="content-type" content="text/html; charset=windows-1252"/>
 	<title>Untitled Document</title>
-	<meta name="generator" content="LibreOffice 7.1.0.3 (Windows)"/>
+	<meta name="generator" content="LibreOffice 7.3.5.2 (Windows)"/>
 	<meta name="created" content="00:00:00"/>
-	<meta name="changed" content="2021-02-25T13:01:29.239000000"/>
+	<meta name="changed" content="2022-12-14T14:24:45.693000000"/>
 	<meta name="Originator" content="Microsoft Word 10"/>
 	<meta name="ProgId" content="Word.Document"/>
+	<meta name="created" content="00:00:00">
 	<meta name="created" content="00:00:00">
 	<style type="text/css">
 		p { color: #000000 }
@@ -53,15 +54,17 @@ park sensor);</p>
 park sensor enable status)</p>
 <p style="orphans: 1">&ldquo;RAINSENSOR&rdquo; (non-standard, show
 rain sensor enable status)</p>
-<p style="orphans: 1">&ldquo;SPARE&rdquo; (non-standard, show nn.n
-number from undefined sensor)</p>
+<p style="orphans: 1">&ldquo;BEEPON&rdquo; (non-standard, enable
+beeper)</p>
+<p style="orphans: 1">&ldquo;BEEPOFF&rdquo; (non-standard, disable
+beeper)</p>
 <p>The Arduino transmits a status, including environment sensory
 information, of which rain and mount park confirmation are currently
 active.</p>
-<p>Message is 14 chars long, with $and # at either end.</p>
-<p>&ldquo;$raining,roofstatus,parked,<font color="#000000">rainsense</font>,<font color="#000000">parksense</font>,<font color="#000000">nn.n</font>#&rdquo;&nbsp;&nbsp;
-rain, rainsense, parksense and parked are Booleans, roofstatus is
-enumerated: 
+<p>Message is 11 chars long, with $and # at either end.</p>
+<p>&ldquo;$raining,roofstatus,parked,<font color="#000000">rainsense</font>,<font color="#000000">parksense</font>,<font color="#000000">beepstatus</font>#&rdquo;&nbsp;&nbsp;
+rain, rainsense, parksense, beepstatus and parked are Booleans,
+roofstatus is enumerated: 
 </p>
 <p>int shutterOpen = 0;</p>
 <p>int shutterClosed = 1;</p>

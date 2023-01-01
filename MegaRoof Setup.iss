@@ -5,7 +5,7 @@
 [Setup]
 AppID={{c6d8b132-b17e-4dae-90f7-be33712c6b37}
 AppName=ASCOM MegaRoof Dome Driver
-AppVerName=ASCOM MegaRoof Dome Driver 2.7
+AppVerName=ASCOM MegaRoof Dome Driver 3.0
 AppVersion=2.7
 AppPublisher=Chris Woodhouse <chris@beyondmonochrome.co.uk>
 AppPublisherURL=mailto:chris@beyondmonochrome.co.uk
