@@ -27,5 +27,5 @@ using System.Runtime.InteropServices;
 // Version information for an assembly consists of the following four values:
 
 
-[assembly: AssemblyVersion("3.0")]
-[assembly: AssemblyFileVersion("3.0")]
+[assembly: AssemblyVersion("3.1")]
+[assembly: AssemblyFileVersion("3.1")]

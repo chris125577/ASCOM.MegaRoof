@@ -22,7 +22,8 @@
 // Feb'21       CJW 2.5    reworked so that open or close waits for response
 // Feb'21       CJW 2.6    updated with different transmission, including sensor overrides
 // Aug'22       CJW 2.7    added supported actions documentation (overdue!!) , 19200 baud
-// Dec'22       CJW 3.0    added BEEPON BEEPOFF and BEEPSTATUS commands
+// Dec'22       CJW 3.0    added BEEPON BEEPOFF and BEEPSTATUS commands - must use with V3 arduino code and V10 of obsy app
+// Jan'23       CJW 3.1    changed logging behavior to help identify special events.
 // --------------------------------------------------------------------------------
 
 
@@ -82,6 +83,7 @@ namespace ASCOM.MegaRoof
         internal char[] delimeter = { ',' };
         internal string arduinoMessage = ""; // string that builds up received message
         internal bool dataRx = false;  // indicates that data is available to read
+        internal string oldshutterstatus = "1"; // default is closed
 
         /// <summary>
         /// Private variable to hold the connected state
@@ -261,7 +263,7 @@ namespace ASCOM.MegaRoof
             {                
                 if (!raw) // if command uses delimiter
                 {
-                    tl.LogMessage("attempting commandstring", command);
+                    //tl.LogMessage("attempting commandstring", command);
                     if (IsConnected)  // only if connected  - try and avoid comms error
                     {
                         if (command == "RAIN" && dataRx) return (arduinoStatus[0]);         // these return status from Arduino message array
@@ -309,7 +311,7 @@ namespace ASCOM.MegaRoof
         {
             get
             {
-                LogMessage("Connected", "Get {0}", IsConnected);
+                // LogMessage("Connected", "Get {0}", IsConnected);
                 return IsConnected;
             }
             set
@@ -411,7 +413,6 @@ namespace ASCOM.MegaRoof
         {
             get
             {
-                //tl.LogMessage("AtHome Get", "Not implemented");
                 throw new ASCOM.PropertyNotImplementedException("AtHome", false);
             }
         }
@@ -420,7 +421,6 @@ namespace ASCOM.MegaRoof
         {
             get
             {
-                //tl.LogMessage("AtPark Get", "Not implemented");
                 throw new ASCOM.PropertyNotImplementedException("AtPark", false);
             }
         }
@@ -429,7 +429,6 @@ namespace ASCOM.MegaRoof
         {
             get
             {
-                //tl.LogMessage("Azimuth Get", "Not implemented");
                 throw new ASCOM.PropertyNotImplementedException("Azimuth", false);
             }
         }
@@ -438,7 +437,6 @@ namespace ASCOM.MegaRoof
         {
             get
             {
-                //tl.LogMessage("CanFindHome Get", false.ToString());
                 return false;
             }
         }
@@ -447,7 +445,6 @@ namespace ASCOM.MegaRoof
         {
             get
             {
-                //tl.LogMessage("CanPark Get", false.ToString());
                 return false;
             }
         }
@@ -456,7 +453,6 @@ namespace ASCOM.MegaRoof
         {
             get
             {
-                //tl.LogMessage("CanSetAltitude Get", false.ToString());
                 return false;
             }
         }
@@ -465,7 +461,6 @@ namespace ASCOM.MegaRoof
         {
             get
             {
-                //tl.LogMessage("CanSetAzimuth Get", false.ToString());
                 return false;
             }
         }
@@ -474,7 +469,6 @@ namespace ASCOM.MegaRoof
         {
             get
             {
-                //tl.LogMessage("CanSetPark Get", false.ToString());
                 return false;
             }
         }
@@ -492,7 +486,6 @@ namespace ASCOM.MegaRoof
         {
             get
             {
-                //tl.LogMessage("CanSlave Get", false.ToString());
                 return false;
             }
         }
@@ -501,8 +494,7 @@ namespace ASCOM.MegaRoof
         {
             get
             {
-               // tl.LogMessage("CanSyncAzimuth Get", false.ToString());
-                return false;
+               return false;
             }
         }
 
@@ -533,7 +525,6 @@ namespace ASCOM.MegaRoof
 
         public void FindHome()
         {
-            //tl.LogMessage("FindHome", "Not implemented");
             throw new ASCOM.MethodNotImplementedException("FindHome");
         }
 
@@ -563,40 +554,43 @@ namespace ASCOM.MegaRoof
 
         public void Park()
         {
-            //tl.LogMessage("Park", "Not implemented");
             throw new ASCOM.MethodNotImplementedException("Park");
         }
 
         public void SetPark()
         {
-            //tl.LogMessage("SetPark", "Not implemented");
             throw new ASCOM.MethodNotImplementedException("SetPark");
         }
 
         public ShutterState ShutterStatus
         {
-            
+            // modified so that log file only registers changed state
             get
             {
-                    string status = CommandString("SHUTTERSTATUS", false);
+                    string status = CommandString("SHUTTERSTATUS", false);             
                     tl.LogMessage("SHUTTERSTATUS", status);
                     switch (status)
                     {
                         case "0":
-                            tl.LogMessage("ShutterStatus", ShutterState.shutterOpen.ToString());
-                            return ShutterState.shutterOpen;
+                        if (oldshutterstatus != status) tl.LogMessage("ShutterStatus", ShutterState.shutterOpen.ToString());
+                        oldshutterstatus = status;
+                        return ShutterState.shutterOpen;
                         case "1":
-                            tl.LogMessage("ShutterStatus", ShutterState.shutterClosed.ToString());
-                            return ShutterState.shutterClosed;
+                        if (oldshutterstatus != status) tl.LogMessage("ShutterStatus", ShutterState.shutterClosed.ToString());
+                        oldshutterstatus = status;
+                        return ShutterState.shutterClosed;
                         case "2":
-                            tl.LogMessage("ShutterStatus", ShutterState.shutterOpening.ToString());
-                            return ShutterState.shutterOpening;
+                        if (oldshutterstatus != status) tl.LogMessage("ShutterStatus", ShutterState.shutterOpening.ToString());
+                        oldshutterstatus = status;
+                        return ShutterState.shutterOpening;
                         case "3":
-                            tl.LogMessage("ShutterStatus", ShutterState.shutterClosing.ToString());
-                            return ShutterState.shutterClosing;
+                        if (oldshutterstatus != status) tl.LogMessage("ShutterStatus", ShutterState.shutterClosing.ToString());
+                        oldshutterstatus = status;
+                        return ShutterState.shutterClosing;
                         default:
-                            tl.LogMessage("ShutterStatus", ShutterState.shutterError.ToString());
-                            return ShutterState.shutterError;
+                        if (oldshutterstatus != status) tl.LogMessage("ShutterStatus", ShutterState.shutterError.ToString());
+                        oldshutterstatus = status;
+                        return ShutterState.shutterError;
                     }
                 }
             }
@@ -605,25 +599,21 @@ namespace ASCOM.MegaRoof
         {
             get
             {
-                //tl.LogMessage("Slaved Get", false.ToString());
                 return false;
             }
             set
             {
-                //tl.LogMessage("Slaved Set", "not implemented");
                 throw new ASCOM.PropertyNotImplementedException("Slaved", true);
             }
         }
 
         public void SlewToAltitude(double Altitude)
         {
-            //tl.LogMessage("SlewToAltitude", "Not implemented");
             throw new ASCOM.MethodNotImplementedException("SlewToAltitude");
         }
 
         public void SlewToAzimuth(double Azimuth)
         {
-            //tl.LogMessage("SlewToAzimuth", "Not implemented");
             throw new ASCOM.MethodNotImplementedException("SlewToAzimuth");
         }
 
@@ -633,14 +623,13 @@ namespace ASCOM.MegaRoof
             get
             {
                 bool slew = (ShutterStatus == ShutterState.shutterOpening || ShutterStatus==ShutterState.shutterClosing);
-                tl.LogMessage("Slewing Get", slew.ToString() );
+                tl.LogMessage("Shutter moving", slew.ToString() );
                 return slew;
             }
         }
 
         public void SyncToAzimuth(double Azimuth)
         {
-            //tl.LogMessage("SyncToAzimuth", "Not implemented");
             throw new ASCOM.MethodNotImplementedException("SyncToAzimuth");
         }
 
